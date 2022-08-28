@@ -1,0 +1,257 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000/v1'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: bearer
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: appSession
+  schemas:
+    PaginationResponse:
+      type: object
+      properties:
+        countPerPage:
+          type: number
+        currentPageIndex:
+          type: number
+        totalPage:
+          type: number
+        totalCount:
+          type: number
+  parameters:
+    CountPerPage:
+      name: countPerPage
+      in: query
+      required: true
+      description: The record count per page.
+      schema:
+        type: number
+    PageIndex:
+      name: pageIndex
+      in: query
+      required: true
+      description: Current page index.
+      schema:
+        type: number
+tags:
+  - name: User
+    description: User API.
+  - name: Auth0
+    description: the callback API for auth0.
+paths:
+  /users/mine/profile:
+    get:
+      description: Get current user profile
+      security:
+        - cookieAuth: []
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  emailVerified:
+                    type: boolean
+                    description: is user verified by email
+                  registerSource:
+                    type: string
+                    description: user register platform
+                    enum:
+                      - google
+                      - facebook
+                      - email
+                  signUpAt:
+                    type: string
+                    format: date-time
+                    description: user sign up time
+    put:
+      description: Update current user profile
+      security:
+        - cookieAuth: []
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: OK
+  /users/mine/verificationEmail:
+    post:
+      description: send verification email
+      security:
+        - cookieAuth: []
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+  /users/verificationEmail/cb:
+    get:
+      description: the verification success callback API for auth0
+      security:
+        - cookieAuth: []
+      tags:
+        - Auth0
+      responses:
+        '200':
+          description: OK
+  /users/mine/password:
+    put:
+      description: Update current user password
+      security:
+        - cookieAuth: []
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  type: string
+                  pattern: >-
+                    ^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$
+                newPassword:
+                  type: string
+                  pattern: >-
+                    ^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$
+                confirmPassword:
+                  type: string
+                  pattern: >-
+                    ^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$
+              required:
+                - oldPassword
+                - newPassword
+                - confirmPassword
+      responses:
+        '200':
+          description: OK
+  /users/mine/session:
+    put:
+      description: Add current user access session.
+      security:
+        - cookieAuth: []
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+  /users:
+    get:
+      description: Get user list
+      parameters:
+        - $ref: '#/components/parameters/CountPerPage'
+        - $ref: '#/components/parameters/PageIndex'
+      security:
+        - cookieAuth: []
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginationResponse'
+                  - properties:
+                      records:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            loginCount:
+                              type: number
+                              description: the user total login count.
+                            signUpAt:
+                              description: the user sign up time.
+                              type: string
+                              format: date-time
+                            lastSessionAt:
+                              description: the user last access session time.
+                              type: string
+                              format: date-time
+  /users/statistics:
+    get:
+      description: Get users statistics
+      security:
+        - cookieAuth: []
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userCount:
+                    type: number
+                    description: the count of total user for system.
+                  todayActivedSessionCount:
+                    type: number
+                    description: the count of actived users today.
+                  averageActivedSessionCountLastWeek:
+                    type: number
+                    description: the average count of actived users for last 7 today.
+  /auth0/login/cb:
+    post:
+      description: the login success callback API for auth0.
+      security:
+        - basicAuth: []
+      tags:
+        - Auth0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email_verified:
+                      type: boolean
+                    email:
+                      type: string
+                    user_id:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                    - email_verified
+                    - email
+                    - user_id
+                    - name
+      responses:
+        '200':
+          description: OK
