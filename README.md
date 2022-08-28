@@ -20,7 +20,7 @@ git clone --depth 1 git@github.com:ambisign-gavin/auth0-demo.git
 cd auth0-demo
 ```
 
-2. Run the initial environment and databaes config command: 
+2. Run the initial environment and database config command: 
 
 ```
 npm run initenv
@@ -50,7 +50,7 @@ npm run install
 npm run dev
 ```
 
-4. Run for production:
+4. Run on production:
 
 ```
 npm run start:prod
