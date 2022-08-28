@@ -90,6 +90,7 @@ const UsersTable = React.memo(() => {
       <Paper sx={{ height: 600, width: 1 }}>
         <DataGrid
           loading={!isAuthenticated || isLoading}
+          paginationMode="server"
           disableColumnMenu
           rows={usersRes?.records || []}
           columns={columns}
