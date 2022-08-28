@@ -3,6 +3,7 @@
 A simple user statistics server, and using Eslint with Airbnb Style Guide to style the code.
 
 Online Demo: https://authdemo.gavinwang.net/
+
 Online API document: https://authdemo.gavinwang.net/docs/api
 
 * [Getting Started](#GettingStarted)
