@@ -2,6 +2,8 @@
 
 A simple user statistics server, and using Eslint with Airbnb Style Guide to style the code.
 
+The project structure is based on my own boilerplate project [express-typescript-boilerplate](https://github.com/ambisign-gavin/express-typescript-boilerplate).
+
 Online Demo: https://authdemo.gavinwang.net/
 
 Online API document: https://authdemo.gavinwang.net/docs/api
