@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { pathOr } from 'ramda';
+import { pathEq, pathOr } from 'ramda';
 import {
   AUTH0_API_TOKEN, AUTH0_CLIENT_ID, AUTH0_SECRET, AUTH0_URL,
 } from 'src/constants/env';
@@ -47,6 +47,9 @@ class Auth0 {
       });
     } catch (error) {
       logger.error(`[auth-updatePassword-error]: ${error}, ${pathOr('', ['response', 'data', 'error_description'], error)}`);
+      if (pathEq(['response', 'data', 'error_description'], 'Wrong email or password.', error)) {
+        throw AuthApiErrors.wrongPassword;
+      }
       throw AuthApiErrors.updatePasswordError;
     }
   }

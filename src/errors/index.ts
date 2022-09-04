@@ -110,4 +110,10 @@ export const AuthApiErrors = {
     code: 400201,
     message: 'update the password error, please try again later.',
   }),
+  wrongPassword: ApiError.create({
+    status: 400,
+    code: 400202,
+    message: 'wrong old password.',
+  }),
+
 };
