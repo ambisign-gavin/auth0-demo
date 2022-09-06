@@ -30,9 +30,9 @@ type IFormData = {
   confirmPassword: string
 };
 
-const passwordRegexp = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+const passwordRegexp = /(?=.{8,})((?=.*\d)(?=.*[a-z])(?=.*[A-Z])|(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W])|(?=.*[a-z])(?=.*[A-Z])(?=.*[\W])).*/;
 
-const wrongPasswordFormat = 'Minimum eight characters, at least one lower character, one upper character, one number and one special character';
+const wrongPasswordFormat = 'Minimum eight characters contain at least 3 of the following types: one lower character, one upper character, one number, and one special character';
 
 const schema: yup.SchemaOf<IFormData> = yup.object({
   oldPassword: yup.string()
