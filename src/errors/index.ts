@@ -90,7 +90,7 @@ export const UserApiErrors = {
   wrongPasswordFormat: ApiError.create({
     status: 400,
     code: 400106,
-    message: 'Minimum eight characters, at least one lower character, one upper character, one number and one special character',
+    message: 'Minimum eight characters contain at least 3 of the following types: one lower character, one upper character, one number, and one special character',
   }),
   userNotFound: ApiError.create({
     status: 404,

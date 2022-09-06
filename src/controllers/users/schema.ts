@@ -6,7 +6,7 @@ export const PutUserProfileSchema: yup.SchemaOf<IPutUserProfileReqBody> = yup.ob
     .typeError(() => DefaultApiErrors.mustBeString('name')),
 });
 
-const passwordRegexp = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+const passwordRegexp = /(?=.{8,})((?=.*\d)(?=.*[a-z])(?=.*[A-Z])|(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W])|(?=.*[a-z])(?=.*[A-Z])(?=.*[\W])).*/;
 
 export const PutUserPasswordReqBody: yup.SchemaOf<IPutUserPasswordReqBody> = yup.object().shape({
   oldPassword: yup.string()
